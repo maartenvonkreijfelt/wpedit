@@ -1,6 +1,6 @@
 (function($){
 
-	const RESTROOT = 'http://restful.dev/wp-json';
+	const RESTROOT = 'https://dwsdemo2.preludio.nl//wp-json';
 	const $ENTRYTITLE = $('.post-title');
 	const $LOGIN = $('#loginform');
 	const $LOGOUT = $('#logout');
