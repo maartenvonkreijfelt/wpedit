@@ -14,7 +14,7 @@ jQuery( document ).ready(function($){
     function getContent() {
 
         // Get the URL from the form.
-        var rawURL = 'http://restful.dev';
+        var rawURL = 'https://dwsdemo2.preludio.nl';
 
         // Check if the string entered in the form is a porper URL.
         try {
