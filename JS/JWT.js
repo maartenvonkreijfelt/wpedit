@@ -5,57 +5,30 @@
 	const $LOGIN = $('#loginform');
 	const $LOGOUT = $('#logout');
 
-	// Add edit post functionality:
-	function editPost() {
 
-	    $ENTRYTITLE.after( '<button class="edit-button edit-title">Edit title</button><button class="edit-title save" style="display: none">Save title</button>' );
-
-	    $('.edit-title.edit-button').click(function(){
-	        let $originalTitle = $ENTRYTITLE.text();
-	        $ENTRYTITLE.toggle();
-	        $ENTRYTITLE.after('<input id="title-input" type="text">');
-	        document.querySelector('#title-input').value = $originalTitle;
-	        $(this).toggle();
-	        $('.edit-title.save').toggle();
-	    });
-
-	    $('.save').click(function(){
-			let postID = document.querySelector('.post').getAttribute('data-id');
-	        let newTitle = document.querySelector('#title-input').value;
-	    });
-
-	}
-	
 	// Get a new token, store it in sessionStorage:
 	function getToken(username,password) {
 
 		$.ajax({
-			url: RESTROOT + '/jwt-auth/v1/token',
-			method: 'POST',
-			data:{
-				'username': username,
-				'password': password
-			}
-		})
+				url: RESTROOT + '/jwt-auth/v1/token',
+				method: 'POST',
+				data:{
+					'username': username,
+					'password': password
+				}
+			})
 
-		.done(function(response){
-			sessionStorage.setItem('newToken',response.token);
-			$LOGIN.toggle();
-			$LOGOUT.toggle();
-			editPost();
-		})
+			.done(function(response){
+				console.info(response);
+			})
 
-		.fail(function(response){
-			console.error("REST error.");
-		})
+			.fail(function(response){
+				console.error("REST error.");
+			})
 	}
 
-	// Clear token from sessionStorage:
-	function clearToken() {
-		sessionStorage.removeItem('newToken');
-		$LOGIN.toggle();
-		$LOGOUT.toggle();
-	}
+
+
 
 
 
@@ -68,6 +41,6 @@
 		getToken(username,password);
 	});
 
-	$('#logout').click(clearToken);
+
 
 })(jQuery);
