@@ -7,26 +7,7 @@
 
 
 
-	// Get a new token, store it in sessionStorage:
-	function getToken(username,password) {
-
-		$.ajax({
-				url: RESTROOT + '/jwt-auth/v1/token',
-				method: 'POST',
-				data:{
-					'username': username,
-					'password': password
-				}
-			})
-
-			.done(function(response){
-				console.info(reponse);
-			})
-
-			.fail(function(response){
-				console.error("REST error.");
-			})
-	}
+	
 
 
 
