@@ -4,6 +4,53 @@
 	const $ENTRYTITLE = $('.post-title');
 	const $LOGIN = $('#loginform');
 	const $LOGOUT = $('#logout');
+
+	function runAjax(postID,newTitle) {
+
+		$.ajax({
+				url: RESTROOT + '/wp/v2/posts/' + postID,
+				method: 'POST',
+				beforeSend: function(xhr) {
+					xhr.setRequestHeader( 'Authorization', 'Bearer ' + sessionStorage.getItem('newToken') );
+				},
+				data:{
+					'title': newTitle
+				}
+			})
+
+			.done(function(response){
+				console.info(response);
+				$('#title-input').toggle();
+				$ENTRYTITLE.text(newTitle);
+				$ENTRYTITLE.toggle();
+				$('.navigation-list a[data-id="' + postID + '"]').text(newTitle);
+				$('.edit-title.edit-button').toggle();
+				$('.edit-title.save').toggle();
+			});
+	}
+
+	// Add edit post functionality:
+	function editPost() {
+
+		$ENTRYTITLE.after( '<button class="edit-button edit-title">Edit title</button><button class="edit-title save" style="display: none">Save title</button>' );
+
+		$('.edit-title.edit-button').click(function(){
+			let $originalTitle = $ENTRYTITLE.text();
+			$ENTRYTITLE.toggle();
+			$ENTRYTITLE.after('<input id="title-input" type="text">');
+			document.querySelector('#title-input').value = $originalTitle;
+			$(this).toggle();
+			$('.edit-title.save').toggle();
+		});
+
+		$('.save').click(function(){
+			let postID = document.querySelector('.post').getAttribute('data-id');
+			let newTitle = document.querySelector('#title-input').value;
+			runAjax(postID,newTitle);
+		});
+
+	}
+
 	// Get a new token, store it in sessionStorage:
 	function getToken(username,password) {
 
@@ -20,13 +67,21 @@
 				sessionStorage.setItem('newToken',response.token);
 				$LOGIN.toggle();
 				$LOGOUT.toggle();
-
+				editPost();
 			})
 
 			.fail(function(response){
 				console.error("REST error.");
 			})
 	}
+
+	// Clear token from sessionStorage:
+	function clearToken() {
+		sessionStorage.removeItem('newToken');
+		$LOGIN.toggle();
+		$LOGOUT.toggle();
+	}
+
 
 
 	$LOGIN.toggle();
@@ -38,17 +93,6 @@
 		getToken(username,password);
 	});
 
-
-
 	$('#logout').click(clearToken);
-
-
-// Clear token from sessionStorage:
-	function clearToken() {
-		sessionStorage.removeItem('newToken');
-		$LOGIN.toggle();
-		$LOGOUT.toggle();
-	}
-
 
 })(jQuery);
