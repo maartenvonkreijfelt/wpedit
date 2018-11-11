@@ -4,8 +4,6 @@
 	const $ENTRYTITLE = $('.post-title');
 	const $LOGIN = $('#loginform');
 	const $LOGOUT = $('#logout');
-
-
 	// Get a new token, store it in sessionStorage:
 	function getToken(username,password) {
 
@@ -19,17 +17,16 @@
 			})
 
 			.done(function(response){
-				console.info(response);
+				sessionStorage.setItem('newToken',response.token);
+				$LOGIN.toggle();
+				$LOGOUT.toggle();
+
 			})
 
 			.fail(function(response){
 				console.error("REST error.");
 			})
 	}
-
-
-
-
 
 
 	$LOGIN.toggle();
@@ -41,6 +38,17 @@
 		getToken(username,password);
 	});
 
+
+
+	$('#logout').click(clearToken);
+
+
+// Clear token from sessionStorage:
+	function clearToken() {
+		sessionStorage.removeItem('newToken');
+		$LOGIN.toggle();
+		$LOGOUT.toggle();
+	}
 
 
 })(jQuery);
